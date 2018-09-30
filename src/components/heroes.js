@@ -1,14 +1,16 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { fetchHeroes } from '../actions';
 
-export default class Heroes extends Component {
+export class Heroes extends Component {
+  componentDidMount() {
+    this.props.fetchHeroes();
+  }
+
   renderHeroes(){
-    const heroes=[
-      {id:1,name:"BLACK WIDOW"},
-      {id:2,name:"CAPTAIN AMERICA"},
-      {id:3,name:"FALCON"}
-    ]
-    return heroes.map(hero => {
+    return _.map(this.props.heroes, hero => {
       return (
         <li key={hero.id}>
           <Link to={`/detail/${hero.id}`}>
@@ -16,8 +18,8 @@ export default class Heroes extends Component {
           </Link>
           <button>x</button>
         </li>
-      )
-    })
+      );
+    });
   }
 
   render() {
@@ -37,3 +39,9 @@ export default class Heroes extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {heroes: state.heroes};
+}
+
+export default connect(mapStateToProps, { fetchHeroes })(Heroes);

@@ -1,23 +1,24 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { fetchHeroes } from '../actions';
 
-export default class Dashboard extends Component {
+export class Dashboard extends Component {
+  componentDidMount() {
+    this.props.fetchHeroes();
+  }
 
   renderHeroes(){
-    const heroes=[
-      {id:1,name:"BLACK WIDOW"},
-      {id:2,name:"CAPTAIN AMERICA"},
-      {id:3,name:"FALCON"}
-    ]
-    return heroes.map(hero => {
+    return _.map(this.props.heroes, hero => {
       return (
         <Link to={`/detail/${hero.id}`} key={hero.id}>
           <div>
             <h4>{hero.name}</h4>
           </div>
         </Link>
-      )
-    })
+      );
+    }).slice(0, 5);
   }
 
   render() {
@@ -31,3 +32,9 @@ export default class Dashboard extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {heroes: state.heroes};
+}
+
+export default connect(mapStateToProps, { fetchHeroes })(Dashboard);
