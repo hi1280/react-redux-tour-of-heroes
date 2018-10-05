@@ -1,32 +1,58 @@
 import React, { Component } from 'react';
+import { Field, reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
+import { fetchHero, updateHero } from '../actions';
 
-export default class HeroDetail extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      id: null
-    }
-  }
-
+class HeroDetail extends Component {
   componentDidMount(){
     const { id } = this.props.match.params;
-    this.setState({id});
+    this.props.fetchHero(id);
+    const { hero } = this.props;
+    this.props.initialize({
+      name: hero.name
+    });
+  }
+
+  onBack() {
+    this.props.history.goBack();
+  }
+
+  onSave(id, values) {
+    this.props.updateHero(id, values);
+    this.props.history.goBack();
   }
 
   render() {
+    const { hero, handleSubmit } = this.props;
+
+    if (!hero) {
+      return <div>Loading...</div>;
+    }
+
     return (
-      <div>
-        <h2>Name Details</h2>
-        <div><span>id: </span>{this.state.id}</div>
+      <form onSubmit={handleSubmit(this.onSave.bind(this, hero.id))}>
+        <h2>{hero.name} Details</h2>
+        <div><span>id: </span>{hero.id}</div>
         <div>
           <label>name:
-            <input />
+            <Field name="name" component="input" type="text"/>
           </label>
         </div>
-        <button>go back</button>
-        <button>save</button>
-      </div>
+        <button onClick={this.onBack.bind(this)} type="button">go back</button>
+        <button type="submit">save</button>
+      </form>
     );
   }
 }
+
+function mapStateToProps({ heroes }, ownProps) {
+  return {
+    hero: heroes[ownProps.match.params.id]
+  };
+}
+
+export default reduxForm({
+  form : 'HeroDetailForm'
+})(
+  connect(mapStateToProps, { fetchHero, updateHero })(HeroDetail)
+)
