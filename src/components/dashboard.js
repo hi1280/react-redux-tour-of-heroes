@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchHeroes } from '../actions';
+import HeroSearch from './hero-search';
 
 export class Dashboard extends Component {
   componentDidMount() {
@@ -28,6 +29,7 @@ export class Dashboard extends Component {
         <div>
           {this.renderHeroes()}
         </div>
+        <HeroSearch />
       </div>
     );
   }

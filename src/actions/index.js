@@ -5,6 +5,7 @@ export const FETCH_HERO = 'fetch_hero';
 export const CREATE_HERO = 'create_hero';
 export const UPDATE_HERO = 'update_hero';
 export const DELETE_HERO = 'delete_hero';
+export const SEARCH_HEROES = 'search_heroes';
 
 const ROOT_URL = 'https://tour-of-heroes-api.herokuapp.com/api/heroes';
 
@@ -46,4 +47,19 @@ export function deleteHero(id) {
     type: DELETE_HERO,
     payload: id
   }
+}
+
+export function searchHeroes(value) {
+  return axios.get(ROOT_URL)
+    .then(res => {
+      return res.data.filter(data => {
+        return data.name.includes(value);
+      });
+    })
+    .then((request) => {
+      return {
+        type: SEARCH_HEROES,
+        payload: request
+      }
+    });
 }
