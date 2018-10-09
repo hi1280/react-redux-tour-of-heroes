@@ -50,7 +50,12 @@ export function deleteHero(id) {
 }
 
 export function searchHeroes(value) {
-  const request =  axios.get(`${ROOT_URL}?name=${value}`);
+  let request =  null
+  if(!value){
+    request = []
+  }else {
+    request =  axios.get(`${ROOT_URL}?name=${value}`);
+  }
   return {
     type: SEARCH_HEROES,
     payload: request

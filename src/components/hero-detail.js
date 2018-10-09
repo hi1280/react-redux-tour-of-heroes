@@ -1,7 +1,26 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { fetchHero, updateHero } from '../actions';
+
+const Label = styled.label`
+  display: inline-block;
+  width: 3em;
+  margin: .5em 0;
+  color: #607D8B;
+  font-weight: bold;
+`
+
+const Input = styled(Field)`
+  height: 2em;
+  font-size: 1em;
+  padding-left: .4em;
+`
+
+const Button = styled.button`
+  margin-top: 20px;
+`
 
 class HeroDetail extends Component {
   componentDidMount(){
@@ -34,12 +53,12 @@ class HeroDetail extends Component {
         <h2>{hero.name} Details</h2>
         <div><span>id: </span>{hero.id}</div>
         <div>
-          <label>name:
-            <Field name="name" component="input" type="text"/>
-          </label>
+          <Label>name:
+            <Input name="name" component="input" type="text"/>
+          </Label>
         </div>
-        <button onClick={this.onBack.bind(this)} type="button">go back</button>
-        <button type="submit">save</button>
+        <Button onClick={this.onBack.bind(this)} type="button">go back</Button>
+        <Button type="submit">save</Button>
       </form>
     );
   }
